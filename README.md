@@ -1,6 +1,6 @@
 # Justdial readme
 
-https://www.justdial.com/city/query
+Testing key is "test"
 
 # Todo
 
@@ -10,6 +10,4 @@ https://www.justdial.com/city/query
 - Timers?
 - Error handling
 - Fix resizing
-- Buttons stay pressed
-- Some alerts
 - Location options
