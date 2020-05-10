@@ -7,9 +7,33 @@ from urllib3 import disable_warnings, exceptions
 import re
 from geopy.geocoders import Nominatim
 import threading
+from tkinter import SUNKEN, RAISED
+import xlsxwriter
+from string import ascii_uppercase as alp
 
 disable_warnings(exceptions.InsecureRequestWarning)
 
+#login Handler
+class loginHandler:
+	def __init__(self):
+		self.loginapp = guiloader.loginApp(self)
+
+	def login(self, e=None):
+		if(self.loginapp.key.get()=="test"):
+			data = app_data.justdial()
+
+			self.stop()
+
+			handlerMain = handler(data)			
+			handlerMain.run()
+		else:
+			self.loginapp.messageBox("error","Wrong login","The serial key was wrong!")
+		
+	def run(self):
+		self.loginapp.ct.run()
+
+	def stop(self):
+		self.loginapp.ct.stop()
 #Main gui handler
 class handler:
 	def __init__(self, data):
@@ -25,19 +49,34 @@ class handler:
 		else:
 			self.scraper = scraper(data[0],data[1], data[2], self)
 			self.scraper.start()
-
+			self.mainapp.navbuttons[0].config(relief=SUNKEN)
 	def stop(self):
 		if(self.scraper.isAlive()):
 			self.scraper.stop()
+			self.mainapp.navbuttons[0].config(relief=RAISED)
 		else:
 			self.mainapp.messageBox("error","Error","There isn't a program running")
-	def export(self):
-		print("Hello")
-		return True
 
+	def export(self):
+		file = xlsxwriter.Workbook("export.xlsx")
+		sheet = file.add_worksheet()
+
+		a=0
+		for column in self.mainapp.columns:
+			sheet.write(alp[a]+"1", column)
+			a+=1
+		a = 2
+		for child in self.mainapp.datatable.get_children():
+			values = self.mainapp.datatable.item(child)["values"]
+			b = 0
+			for value in range(0, len(values)):
+				sheet.write(alp[b]+str(a), values[value])
+				b += 1
+			a += 1
+		file.close()
+		self.mainapp.messageBox("info","Exported","Exported entries to file export.xlsx")
 	def clear(self):
-		print("clear")
-		return True
+		self.mainapp.datatable.delete(*self.mainapp.datatable.get_children())
 
 	def insert(self, data):
 		self.mainapp.datatable.insert("",'end',values=tuple(data))
@@ -132,13 +171,11 @@ class scraper(threading.Thread):
 				if(self._running):
 					self.getData(link)
 			page += 1
-		handler.mainapp.messageBox("info","Success","Scraper has finished!")
+		if(self._running):
+			self.handler.mainapp.messageBox("info","Success","Scraper has finished!")
 	def stop(self):
-		print(self.is_alive())
 		self._running = False
 
 if __name__ == '__main__':
-	data = app_data.justdial()
-
-	handler = handler(data)
-	handler.run()
+	login = loginHandler()
+	login.run()

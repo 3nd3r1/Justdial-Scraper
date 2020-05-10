@@ -3,25 +3,29 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+from os import path
 
+global base_path
+base_path = path.abspath(".")
 class controller:
 	def __init__(self, file):
 		self.builder = builder = pygubu.Builder()
-		builder.add_from_file(file)
+		builder.add_from_file(path.join(base_path, file))
 	#Just saving some lines with this
 	def ld(self, obj):
 		return self.builder.get_object(obj)
 	def run(self):
 		self.ld("root").mainloop()
+	def stop(self):
+		self.ld("root").destroy()
 
 class loginApp:
-	def __init__(self):
-		self.ct = controller("gui\login.ui")
-
+	def __init__(self, handler):
+		self.ct = controller("login.ui")
+		self.handler = handler
 		#Funcs
 		self.loadVars()
 		self.loadConfig()
-		self.run()
 
 	def loadVars(self):
 		ct = self.ct
@@ -30,22 +34,22 @@ class loginApp:
 		self.submit = ct.ld("submit")
 
 	def loadConfig(self):
-		self.key.bind("<Return>", self.login)
-		self.submit.config(command=self.login)
+		self.key.bind("<Return>", self.handler.login)
+		self.submit.config(command=self.handler.login)
 
-	def run(self):
-		self.ct.run()
-
-	def login(self):
-		if(self.key.get()=="admin"):
-			print("success")
-		else:
-			messagebox.showerror("Wrong login","The serial key was wrong!")
+	def messageBox(self, type, title, txt):
+		if type=="error":
+			return messagebox.showerror(title, txt)
+		if type=="info":
+			return messagebox.showinfo(title, txt)
+		if type=="waring":
+			return messagebox.showwarning(title, txt)
+	
 
 class mainApp:
 	def __init__(self, data, handler):
 		#main stuff
-		self.ct = controller("gui\main.ui")
+		self.ct = controller("main.ui")
 		self.data = data
 		self.columns = data.columns
 		self.handler = handler
