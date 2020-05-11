@@ -105,16 +105,15 @@ class scraper(threading.Thread):
 		r = requests.get("https://justdial.com", verify=False, headers = self.headers)
 		return r.cookies.get_dict()
 
-	#Get html of page
-	def getPage(self, page):
-		r = requests.get(self.url.format(str(page)), verify=False, headers=self.headers, cookies=self.cookies)
-		return json.loads(r.text)["markup"]
 	#Get links from the html
-	def getLinks(self, html):
-		s = BeautifulSoup(html,"html.parser")
+	def getUrls(self, page):
+		r = requests.get(self.url.format(str(page)), verify=False, headers=self.headers, cookies=self.cookies)
+		s = BeautifulSoup(json.loads(r.text)["markup"],"html.parser")
 		urls = []
+
 		for a in s.find_all("li", {"class":"cntanr"}):
 			urls.append(a["data-href"])
+
 		return urls
 	#Convert icons to numbers
 	def getNumbers(self, html):
@@ -163,13 +162,13 @@ class scraper(threading.Thread):
 		except:
 			email = ""
 
-		self.handler.insert([category, company, address, email, numbers, latitude, longitude, rating, votes, verified, trusted, website])
+		return [category, company, address, email, numbers, latitude, longitude, rating, votes, verified, trusted, website]
 	def run(self):
 		page = 1
 		while self._running and page <= int(self.maxpage):
-			for link in self.getLinks(self.getPage(page)):
+			for link in self.getUrls(page):
 				if(self._running):
-					self.getData(link)
+					self.handler.insert(self.getData(link))
 			page += 1
 		if(self._running):
 			self.handler.mainapp.messageBox("info","Success","Scraper has finished!")
