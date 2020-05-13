@@ -148,7 +148,11 @@ class scraper(threading.Thread):
 			latitude, longitude = "",""
 
 		votes = s.find("span",{"class":"votes"}).text
-		rating = s.find("span",{"class":"value-titles"}).text
+		try:
+			rating = s.find("span",{"class":"value-titles"}).text
+		except:
+			rating = "0"
+
 		verified = s.find("span",{"class":"jd_verified"})!=None
 		trusted = s.find("span",{"class":"jd_trusted"})!=None
 
@@ -171,6 +175,7 @@ class scraper(threading.Thread):
 					self.handler.insert(self.getData(link))
 			page += 1
 		if(self._running):
+			self.handler.stop()
 			self.handler.mainapp.messageBox("info","Success","Scraper has finished!")
 	def stop(self):
 		self._running = False
