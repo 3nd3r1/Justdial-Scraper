@@ -2,7 +2,7 @@
 
 Testing key is "test"
 
-#Info
+# Info
 
 The programs scrapes emails from the company website. This is why the emails can sometimes be inaccurate!
 
