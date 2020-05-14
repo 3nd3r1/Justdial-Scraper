@@ -4,6 +4,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from os import path
+import sys
 
 global base_path
 base_path = path.abspath(".")
@@ -43,8 +44,7 @@ class loginApp:
 		if type=="info":
 			return messagebox.showinfo(title, txt)
 		if type=="waring":
-			return messagebox.showwarning(title, txt)
-	
+			return messagebox.showwarning(title, txt)	
 
 class mainApp:
 	def __init__(self, data, handler):
@@ -159,6 +159,8 @@ class mainApp:
 			return messagebox.showinfo(title, txt)
 		if type=="waring":
 			return messagebox.showwarning(title, txt)
+		if type=="askyesorno":
+			return messagebox.askyesno(title, txt)
 	#Run
 	def run(self):
 		self.ct.run()

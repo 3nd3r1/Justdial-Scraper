@@ -15,5 +15,4 @@ The programs scrapes emails from the company website. This is why the emails can
 - Error handling
 - Fix resizing
 - Location options
-- Add check box for emails or no
 - Better coordinate finder

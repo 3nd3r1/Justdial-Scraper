@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <interface>
-  <object class="tk.Toplevel" id="root">
+  <object id="root" class="tk.Toplevel">
     <property name="geometry">1500x800</property>
     <property name="height">1500</property>
     <property name="padx">0</property>
     <property name="width">800</property>
     <child>
-      <object class="tk.Frame" id="main">
+      <object id="main" class="tk.Frame">
         <property name="height">800</property>
         <property name="padx">0</property>
         <property name="pady">1</property>
@@ -17,7 +17,7 @@
           <property name="row">0</property>
         </layout>
         <child>
-          <object class="tk.Frame" id="left">
+          <object id="left" class="tk.Frame">
             <property name="background">#ffffff</property>
             <property name="height">200</property>
             <property name="width">200</property>
@@ -27,7 +27,7 @@
               <property name="row">0</property>
             </layout>
             <child>
-              <object class="tk.Frame" id="nav">
+              <object id="nav" class="tk.Frame">
                 <property name="background">#c0c0c0</property>
                 <property name="height">200</property>
                 <property name="width">200</property>
@@ -37,7 +37,7 @@
                   <property name="row">0</property>
                 </layout>
                 <child>
-                  <object class="tk.Button" id="startbt">
+                  <object id="startbt" class="tk.Button">
                     <property name="cursor">arrow</property>
                     <property name="font">{TkHeadingFont,} 10 {}</property>
                     <property name="justify">center</property>
@@ -51,7 +51,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="tk.Button" id="stopbt">
+                  <object id="stopbt" class="tk.Button">
                     <property name="font">{TkHeadingFont,} 10 {}</property>
                     <property name="repeatdelay">0</property>
                     <property name="text" translatable="yes">Stop</property>
@@ -64,7 +64,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.Separator" id="separator_1">
+                  <object id="separator_1" class="ttk.Separator">
                     <property name="orient">horizontal</property>
                     <layout>
                       <property name="column">0</property>
@@ -75,7 +75,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="tk.Button" id="exportbt">
+                  <object id="exportbt" class="tk.Button">
                     <property name="default">normal</property>
                     <property name="font">{TkHeadingFont,} 10 {}</property>
                     <property name="pady">0</property>
@@ -89,7 +89,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="tk.Button" id="clearbt">
+                  <object id="clearbt" class="tk.Button">
                     <property name="font">{TkHeadingFont,} 10 {}</property>
                     <property name="text" translatable="yes">Clear</property>
                     <layout>
@@ -103,7 +103,7 @@
               </object>
             </child>
             <child>
-              <object class="tk.Frame" id="inputframe">
+              <object id="inputframe" class="tk.Frame">
                 <property name="height">200</property>
                 <property name="width">200</property>
                 <layout>
@@ -116,7 +116,7 @@
           </object>
         </child>
         <child>
-          <object class="tk.Frame" id="dataframe">
+          <object id="dataframe" class="tk.Frame">
             <property name="background">#c0c0c0</property>
             <property name="height">200</property>
             <property name="width">200</property>
@@ -126,7 +126,7 @@
               <property name="row">0</property>
             </layout>
             <child>
-              <object class="ttk.Treeview" id="datatable">
+              <object id="datatable" class="ttk.Treeview">
                 <property name="selectmode">extended</property>
                 <layout>
                   <property name="column">0</property>
@@ -136,7 +136,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Scrollbar" id="scrollbar_x">
+              <object id="scrollbar_x" class="ttk.Scrollbar">
                 <property name="orient">horizontal</property>
                 <layout>
                   <property name="column">0</property>
@@ -146,7 +146,7 @@
               </object>
             </child>
             <child>
-              <object class="ttk.Scrollbar" id="scrollbar_y">
+              <object id="scrollbar_y" class="ttk.Scrollbar">
                 <property name="orient">vertical</property>
                 <layout>
                   <property name="column">1</property>
