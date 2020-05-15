@@ -15,7 +15,7 @@ from string import ascii_uppercase as alp
 
 disable_warnings(exceptions.InsecureRequestWarning)
 
-#login Handler
+#login Handler //If you want to add a login
 class loginHandler:
 	def __init__(self, data):
 		self.loginapp = guiloader.loginApp(self)
@@ -47,7 +47,8 @@ class handler:
 	def __init__(self, data):
 		self.data = data
 		self.mainapp = guiloader.mainApp(data, self)
-		self.checkUpdate()
+		# Add this if you want to host an updater
+		# self.checkUpdate()
 
 	def getValue(self, input):
 		return self.mainapp.inputs[input].get()
@@ -132,12 +133,16 @@ class scraper(threading.Thread):
 
 	def getSession(self):
 		r = requests.get("https://justdial.com", verify=False, headers = self.headers)
+		if self.handler.data.DEBUG:
+			print("[DEBUG] urls data: "+r.text)
 		return r.cookies.get_dict()
 
 	#Get links from the html
 	def getUrls(self, page):
 		r = requests.get(self.url.format(str(page)), verify=False, headers=self.headers, cookies=self.cookies)
 		s = BeautifulSoup(json.loads(r.text)["markup"],"html.parser")
+		if self.handler.data.DEBUG:
+			print("[DEBUG] urls data: "+r.text)
 		urls = []
 
 		for a in s.find_all("li", {"class":"cntanr"}):
@@ -161,6 +166,8 @@ class scraper(threading.Thread):
 	def getData(self, url):
 		r = requests.get(url, verify=False, headers=self.headers, cookies=self.cookies)
 		s = BeautifulSoup(r.text, "lxml")
+		if self.handler.data.DEBUG:
+			print("[DEBUG] getDataAnswer: "+r.text)
 		decode = self.getNumbers(s.find_all("style")[1].text)
 		contact = s.find("div",{"class":"paddingR0"})
 		category = ', '.join([i['title'] for i in contact.find_all("a",{"class":"lng_also_lst1"})])
@@ -206,9 +213,15 @@ class scraper(threading.Thread):
 	def run(self):
 		page = 1
 		while self._running and page <= int(self.maxpage):
+			if self.handler.data.DEBUG:
+				print("[DEBUG] urls: "+str(self.getUrls(page)))
 			for link in self.getUrls(page):
 				if(self._running):
-					self.handler.insert(self.getData(link))
+					try:
+						self.handler.insert(self.getData(link))
+					except:
+						print("[ERROR] Error with url: "+link)
+						pass
 			page += 1
 		if(self._running):
 			self.handler.stop()
@@ -218,5 +231,5 @@ class scraper(threading.Thread):
 
 if __name__ == '__main__':
 	data = app_data.justdial()
-	login = loginHandler(data)
-	login.run()
+	handler = handler(data)
+	handler.run()
