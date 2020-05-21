@@ -47,8 +47,7 @@ class handler:
 	def __init__(self, data):
 		self.data = data
 		self.mainapp = guiloader.mainApp(data, self)
-		# Add this if you want to host an updater
-		# self.checkUpdate()
+		self.checkUpdate()
 
 	def getValue(self, input):
 		return self.mainapp.inputs[input].get()
@@ -133,18 +132,13 @@ class scraper(threading.Thread):
 
 	def getSession(self):
 		r = requests.get("https://justdial.com", verify=False, headers = self.headers)
-		if self.handler.data.DEBUG:
-			print("[DEBUG] urls data: "+r.text)
 		return r.cookies.get_dict()
 
 	#Get links from the html
 	def getUrls(self, page):
 		r = requests.get(self.url.format(str(page)), verify=False, headers=self.headers, cookies=self.cookies)
 		s = BeautifulSoup(json.loads(r.text)["markup"],"html.parser")
-		if self.handler.data.DEBUG:
-			print("[DEBUG] urls data: "+r.text)
 		urls = []
-
 		for a in s.find_all("li", {"class":"cntanr"}):
 			urls.append(a["data-href"])
 
@@ -165,10 +159,8 @@ class scraper(threading.Thread):
 	#Get data from the links
 	def getData(self, url):
 		r = requests.get(url, verify=False, headers=self.headers, cookies=self.cookies)
-		s = BeautifulSoup(r.text, "lxml")
-		if self.handler.data.DEBUG:
-			print("[DEBUG] getDataAnswer: "+r.text)
-		decode = self.getNumbers(s.find_all("style")[1].text)
+		s = BeautifulSoup(r.text, "lxml")	
+		decode = self.getNumbers(str(s.find_all("style")[1]))
 		contact = s.find("div",{"class":"paddingR0"})
 		category = ', '.join([i['title'] for i in contact.find_all("a",{"class":"lng_also_lst1"})])
 		company = s.find("span",{"class":"fn"}).text
@@ -213,14 +205,12 @@ class scraper(threading.Thread):
 	def run(self):
 		page = 1
 		while self._running and page <= int(self.maxpage):
-			if self.handler.data.DEBUG:
-				print("[DEBUG] urls: "+str(self.getUrls(page)))
 			for link in self.getUrls(page):
 				if(self._running):
 					try:
 						self.handler.insert(self.getData(link))
-					except:
-						print("[ERROR] Error with url: "+link)
+					except Exception as e:
+						print("[ERROR] Error with url: "+str(e))
 						pass
 			page += 1
 		if(self._running):
@@ -231,5 +221,5 @@ class scraper(threading.Thread):
 
 if __name__ == '__main__':
 	data = app_data.justdial()
-	handler = handler(data)
-	handler.run()
+	loginHandler = loginHandler(data)
+	loginHandler.run()

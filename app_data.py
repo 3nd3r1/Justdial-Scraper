@@ -4,10 +4,9 @@ from tkinter import W,E,S,N
 #Input and Columns template
 class justdial:
 	def __init__(self):
-		self.app_version = "0.21"
+		self.app_version = "0.2"
 		self.app_name = "just-dial"
-		self.api_url = "" #add this if you want to host updater and login
-		self.DEBUG = False
+		self.api_url = "https://datascraper-database.herokuapp.com/api/" 
 		self.columns = ["Category","Company","Address","Email","Numbers","Latitude","Longitude","Rating","Reviews","Verified","Trusted","Website"]
 	def loadInputs(self, frame):
 
