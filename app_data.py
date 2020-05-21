@@ -6,7 +6,7 @@ class justdial:
 	def __init__(self):
 		self.app_version = "0.2"
 		self.app_name = "just-dial"
-		self.api_url = "https://datascraper-database.herokuapp.com/api/" 
+		self.api_url = "" 
 		self.columns = ["Category","Company","Address","Email","Numbers","Latitude","Longitude","Rating","Reviews","Verified","Trusted","Website"]
 	def loadInputs(self, frame):
 

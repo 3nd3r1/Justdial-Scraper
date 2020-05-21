@@ -26,8 +26,7 @@ class loginHandler:
 		result = json.loads(r.text)["result"]
 		if result == "true":
 			self.stop()
-			handlerMain = handler(self.data)
-			handlerMain.run()
+
 
 		elif result == "false":
 			self.loginapp.messageBox("error","Wrong login","The serial key was wrong!")
@@ -47,7 +46,8 @@ class handler:
 	def __init__(self, data):
 		self.data = data
 		self.mainapp = guiloader.mainApp(data, self)
-		self.checkUpdate()
+		#Update from api
+		#self.checkUpdate()
 
 	def getValue(self, input):
 		return self.mainapp.inputs[input].get()
@@ -221,5 +221,5 @@ class scraper(threading.Thread):
 
 if __name__ == '__main__':
 	data = app_data.justdial()
-	loginHandler = loginHandler(data)
-	loginHandler.run()
+	handlerMain = handler(data)
+	handlerMain.run()
